@@ -1,0 +1,138 @@
+a:link {
+  color:#5588aa;
+  text-decoration:none;
+  }
+a:visited {
+  color:#996699;
+  text-decoration:none;
+  }
+a:hover {
+  color:#001144;
+  text-decoration:underline;
+}
+body {
+  font-family:'Lucida Grande', Helvetica, Arial, sans-serif; 
+  font-size:14px;
+}
+#container {
+  height: 100%;
+  line-height:1.5em; 
+  width:550px; 
+  margin: 30px auto;
+  padding-bottom: 10em;
+  color: #333;
+}
+#search_bar {
+  text-align: center;
+}
+#header, #small_header,
+#tagline, #small_tagline {
+  text-align:center; 
+  font-family:'Lucida Grande', Helvetica, Arial, sans-serif; 
+  color:#AAA; 
+  font-weight:bold; 
+}
+#small_header a:link, #small_header a:visited, 
+#small_header a:hover {
+  color: #AAA;
+  text-decoration: none;
+}
+#header {
+  font-size:4em; 
+  letter-spacing:-0.05em;
+  margin-top: 80px;
+  line-height: 1em;
+}
+#tagline {
+  margin-top:-0.2em;
+  font-size:0.7em;  
+  margin-bottom:1em;
+  line-height: 1em;
+}
+#small_header {
+  font-size:2em; 
+  letter-spacing:-0.05em;
+  line-height: 1em;
+}
+#small_tagline {
+  margin-top:-0.2em;
+  font-size:0.5em; 
+  margin-bottom:1em; 
+  line-height: 1em;
+}
+#search_term {
+  font-family:'Lucida Grande', Helvetica, Arial, sans-serif; 
+  text-align:center; 
+  font-size:0.75em; 
+  color:#999; 
+  margin-top:0em;
+  margin-bottom:2em; 
+  font-weight:bold; 
+  letter-spacing:0.05em;
+}      
+.search_entry {
+  padding-bottom: 0.5em;
+}
+.search_title {
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+.search_authors {
+  padding-left:1em;
+}
+.search_reference {
+  padding-left:2em;
+  font-style: italics;
+}
+.title {
+  font-size: 1.75em;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  line-height: 1em;
+  padding-bottom: 0.5em;
+  margin-top: 1em;
+}
+.authors {
+   padding-left: 1em;
+}
+.reference {
+  padding-left:1em;
+  font-style: italics;
+  padding-bottom: 0.5em;
+}
+.abstract {
+  padding-top:2em;
+  padding-bottom:3em;
+}
+.links {
+  padding-left:1em;
+}
+.page_links {
+  margin-top: 3em;
+  padding-bottom: 7em;
+}
+.button {
+  float: left;
+  font-family:'Lucida Grande', Helvetica, Arial, sans-serif; 
+  font-size: 0.6em;
+  margin-right: 0.5em;
+  color: #666;
+  background-color: #EEEEEE;
+  padding: 0 5px 0 5px;
+  margin-top: 0.5em;
+  text-transform: lowercase;
+}
+.button a {
+}
+#comments {
+  margin: 0;
+  padding-top: 1em;
+  padding-bottom: 10em;
+}
+textarea { 
+  border: 2px solid orange;
+} 
+#dsq-content #dsq-comments .dsq-comment-body 
+{ 
+   font-size: 14px; 
+} 
