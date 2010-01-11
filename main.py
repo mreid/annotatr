@@ -18,65 +18,23 @@
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext import db
-from google.appengine.ext.webapp import util
+from google.appengine.ext.webapp import util, template
 
 from BeautifulSoup import BeautifulSoup
 from mako.template import Template
 
+import os
 import urllib
 import re
 import cgi
 
-index_template = """
-<html>
-<head>
-<title>annotatr</title>
-<link rel="stylesheet" type="text/css" media="screen" href="/styles/style.css"/> 
-</head>
-<body>
-<div id="container">
-  <div id="header">annotatr</div>
-  <div id="tagline">citeulike+disqus mashup</div>
-                
-  <div class="abstract" style="text-align:center">
-    Find abstracts and comment on them.
-  </div>
-
-  <div id="search_bar">
-    <form method="get" action="/search/all">
-    <input type="text" name="q" style="width:470px"/>
-    <input type="submit" value="Search" />
-  </div>
-
-  <div class="abstract" style="color:#AAA; text-align:center">
-    search examples
-    <br>
-    <br>
-    <a href="/search/all?q=beta+%26%26+sheet*+%21alpha+%21helix">beta && sheet* !alpha !helix</a>
-    <br>
-    <a href="/search/all?q=author%3A%22franklin+r+e%22">author:"franklin r e"</a>
-    <br>
-    <a href="/search/all?q=year%3A2007+journal%3Anature">year:2007 journal:nature</a>
-    <br>
-    <a href="/search/all?q=year%3A%5B1995+TO+1997%5D">year:[1995 TO 1997]</a>
-  </div>
-
-
-</form>
-</div>
-</body>
-</html>
-"""
-
 class MainHandler(webapp.RequestHandler):
   def get(self):
-    self.response.out.write(index_template)
-
+    self.response.out.write(open('index.html').read())
 
 class StyleHandler(webapp.RequestHandler):
   def get(self):
     self.response.out.write(open('style.css').read())
-
 
 def contents_unicode(contents, separator=""):
   s = u""
@@ -320,7 +278,6 @@ class ArticleHandler(webapp.RequestHandler):
       attrs = metadata_from_citeulike_page(socket.read(), url)
       s = template.render_unicode(attributes=attrs)
       self.response.out.write(template.render_unicode(attributes=attrs))
-
 
 def main():
   application = webapp.WSGIApplication(
