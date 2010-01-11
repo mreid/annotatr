@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
-# Copyright 2007 Google Inc.
+# annotatr
+# Copyright 2009 - Bosco Ho and Mark Reid
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,17 +14,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-
+from google.appengine.api import users
 from google.appengine.ext import webapp
+from google.appengine.ext import db
 from google.appengine.ext.webapp import util
-import urllib
+
 from BeautifulSoup import BeautifulSoup
-import re
-import cgi
 from mako.template import Template
 
+import urllib
+import re
+import cgi
 
 index_template = """
 <html>
@@ -50,13 +52,13 @@ index_template = """
     search examples
     <br>
     <br>
-    beta && sheet* !alpha !helix
+    <a href="/search/all?q=beta+%26%26+sheet*+%21alpha+%21helix">beta && sheet* !alpha !helix</a>
     <br>
-    author:"franklin r e"
+    <a href="/search/all?q=author%3A%22franklin+r+e%22">author:"franklin r e"</a>
     <br>
-    year:2007 journal:nature
+    <a href="/search/all?q=year%3A2007+journal%3Anature">year:2007 journal:nature</a>
     <br>
-    year:[1995 TO 1997]
+    <a href="/search/all?q=year%3A%5B1995+TO+1997%5D">year:[1995 TO 1997]</a>
   </div>
 
 
