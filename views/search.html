@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>annotatr</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/styles/style.css"/> 
+</head>
+</head>
+<body>
+<div id="container">
+  <div id="small_header"><a href="/">annotatr</a></div>
+  <div id="small_tagline">citeulike+disqus mashup</div>
+
+  <div id="search_bar">
+    <form method="get" action="/search/all">
+    <input type="text" name="q" style="width:470px"/>
+    <input type="submit" value="Search" />
+  </div>
+
+  <div id="search_term">
+    ${attributes['query']}
+  </div>
+  
+  % for entry in attributes['entries']:
+  <div class="search_entry">
+    <div class="search_title">
+      <a href="/citeulike${entry['link']}">${entry['title']}</a>
+    </div>
+    <div class="search_authors">
+      ${entry['authors']}
+    </div>
+    <div class="search_reference">
+      <i>${entry['reference']}</i>
+    </div>
+  </div>
+  % endfor
+  
+  <div class="page_links">
+    % for search_page in attributes['search_pages']:
+    <div class="button">
+      ${search_page}
+    </div>  
+    % endfor
+    <br clear=all>
+  </div>
+  
+</div>
+</body>
+</html>

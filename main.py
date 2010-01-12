@@ -30,7 +30,7 @@ import cgi
 
 class MainHandler(webapp.RequestHandler):
   def get(self):
-    self.response.out.write(open('index.html').read())
+    self.response.out.write(open('views/index.html').read())
 
 class StyleHandler(webapp.RequestHandler):
   def get(self):
@@ -48,6 +48,9 @@ def contents_unicode(contents, separator=""):
     s += new_s
   return s
 
+def canonical_citeulike_link(link):
+   pattern = re.compile('/article/\d+$')
+   return pattern.search(link).group()
 
 def metadata_from_citeulike_search(txt, i_page):
   soup = BeautifulSoup(txt)
@@ -66,7 +69,7 @@ def metadata_from_citeulike_search(txt, i_page):
     entry = {
        'title': title,
        'authors': authors,
-       'link': link,
+       'link': canonical_citeulike_link(link),
        'reference': reference }
     entries.append(entry)
   pages = []
@@ -90,57 +93,6 @@ def metadata_from_citeulike_search(txt, i_page):
   return entries, search_pages
 
 
-search_template = u"""
-<html>
-<head>
-<title>annotatr</title>
-<link rel="stylesheet" type="text/css" media="screen" href="/styles/style.css"/> 
-</head>
-</head>
-<body>
-<div id="container">
-  <div id="small_header"><a href="/">annotatr</a></div>
-  <div id="small_tagline">citeulike+disqus mashup</div>
-
-  <div id="search_bar">
-    <form method="get" action="/search/all">
-    <input type="text" name="q" style="width:470px"/>
-    <input type="submit" value="Search" />
-  </div>
-
-  <div id="search_term">
-    ${attributes['query']}
-  </div>
-  
-  % for entry in attributes['entries']:
-  <div class="search_entry">
-    <div class="search_title">
-      <a href="/citeulike${entry['link']}">${entry['title']}</a>
-    </div>
-    <div class="search_authors">
-      ${entry['authors']}
-    </div>
-    <div class="search_reference">
-      <i>${entry['reference']}</i>
-    </div>
-  </div>
-  % endfor
-  
-  <div class="page_links">
-    % for search_page in attributes['search_pages']:
-    <div class="button">
-      ${search_page}
-    </div>  
-    % endfor
-    <br clear=all>
-  </div>
-  
-</div>
-</body>
-</html>
-"""
-
-
 class SearchHandler(webapp.RequestHandler):
   def get(self):
     search_terms = self.request.get('q')
@@ -159,14 +111,14 @@ class SearchHandler(webapp.RequestHandler):
         'entries': entries, 
         'query': 'citeulike.org/search/all?'+query_string.lower(),
         'search_pages': pages}
-    template = Template(search_template)
+    template = Template(open('views/search.html').read())
     s = template.render_unicode(attributes=attrs)
     self.response.out.write(s)
 
 
 def metadata_from_citeulike_page(txt, url):
   attrs = {
-      'tittle': '',
+      'title': '',
       'author': '',
       'reference': '',
       'links': [('citeulike', url)],
@@ -196,89 +148,21 @@ def metadata_from_citeulike_page(txt, url):
   return attrs
 
 
-page_template = u"""
-<html>
-<head>
-<title>annotatr</title>
-<link rel="stylesheet" type="text/css" media="screen" href="/styles/style.css"/> 
-</head>
-<body>
-<div id="container">
-  <div id="small_header"><a href="/">annotatr</a></div>
-  <div id="small_tagline">citeulike+disqus mashup</div>
-
-  <div id="search_bar">
-    <form method="get" action="/search/all">
-    <input type="text" name="q" style="width:470px"/>
-    <input type="submit" value="Search" />
-  </div>
-
-  <div class="title">
-    ${attributes['title']}
-  </div>
-
-  <div class="authors">
-    ${attributes['author']}
-  </div>
-
-  <div class="reference">
-    <i>${attributes['reference']}</i>
-  </div>
-
-  <div class="links">
-    % for label, link in attributes['links']:
-    <div class="button">
-      <a href="${link}">${label}</a>
-    </div>
-    % endfor
-    <br clear="all">
-  </div>
-
-  <div class="abstract">
-    ${attributes['abstract']}
-  </div>
-
-  <script type="text/javascript">
-//<![CDATA[
-(function() {
-	var links = document.getElementsByTagName('a');
-	var query = '?';
-	for(var i = 0; i < links.length; i++) {
-	if(links[i].href.indexOf('#disqus_thread') >= 0) {
-		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
-	}
-	}
-	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/annotatr/get_num_replies.js' + query + '"></' + 'script>');
-})();
-//]]>
-  </script>
-
-  <div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/annotatr/embed.js"></script><noscript><a href="http://disqus.com/forums/annotatr/?url=ref">View the discussion thread.</a></noscript>
-
-  <div style="width:100%; height:8em">
-    &nbsp;
-  </div>
-
-</body>
-</html>
-"""
-
-
 class ArticleHandler(webapp.RequestHandler):
   def get(self):
     path = self.request.path.replace('citeulike/', '')
     url = 'http://www.citeulike.org' + path
     socket = urllib.urlopen(url)
-    opened_url = socket.geturl()
-    if url != opened_url:
-      path = opened_url.replace('http://www.citeulike.org/', '')
-      self.redirect('/citeulike/' + path)
-    else:
-      template = Template(page_template)
-      attrs = metadata_from_citeulike_page(socket.read(), url)
-      s = template.render_unicode(attributes=attrs)
-      self.response.out.write(template.render_unicode(attributes=attrs))
-
+    # opened_url = socket.geturl()
+    # if url != opened_url:
+    #   path = opened_url.replace('http://www.citeulike.org/', '')
+    #   self.redirect('/citeulike/' + path)
+    # else:
+    template = Template(open('views/page.html').read())
+    attrs = metadata_from_citeulike_page(socket.read(), url)
+    s = template.render_unicode(attributes=attrs)
+    self.response.out.write(template.render_unicode(attributes=attrs))
+ 
 def main():
   application = webapp.WSGIApplication(
       [('/', MainHandler), 

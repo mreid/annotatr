@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>annotatr</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/styles/style.css"/> 
+</head>
+<body>
+<div id="container">
+  <div id="small_header"><a href="/">annotatr</a></div>
+  <div id="small_tagline">citeulike+disqus mashup</div>
+
+  <div id="search_bar">
+    <form method="get" action="/search/all">
+    <input type="text" name="q" style="width:470px"/>
+    <input type="submit" value="Search" />
+  </div>
+
+  <div class="title">
+    ${attributes['title']}
+  </div>
+
+  <div class="authors">
+    ${attributes['author']}
+  </div>
+
+  <div class="reference">
+    <i>${attributes['reference']}</i>
+  </div>
+
+  <div class="links">
+    % for label, link in attributes['links']:
+    <div class="button">
+      <a href="${link}">${label}</a>
+    </div>
+    % endfor
+    <br clear="all">
+  </div>
+
+  <div class="abstract">
+    ${attributes['abstract']}
+  </div>
+
+  <script type="text/javascript">
+//<![CDATA[
+(function() {
+	var links = document.getElementsByTagName('a');
+	var query = '?';
+	for(var i = 0; i < links.length; i++) {
+	if(links[i].href.indexOf('#disqus_thread') >= 0) {
+		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+	}
+	}
+	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/annotatr/get_num_replies.js' + query + '"></' + 'script>');
+})();
+//]]>
+  </script>
+
+  <div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/annotatr/embed.js"></script><noscript><a href="http://disqus.com/forums/annotatr/?url=ref">View the discussion thread.</a></noscript>
+
+  <div style="width:100%; height:8em">
+    &nbsp;
+  </div>
+
+</body>
+</html>
