@@ -32,10 +32,6 @@ class MainHandler(webapp.RequestHandler):
   def get(self):
     self.response.out.write(open('views/index.html').read())
 
-class StyleHandler(webapp.RequestHandler):
-  def get(self):
-    self.response.out.write(open('style.css').read())
-
 def contents_unicode(contents, separator=""):
   s = u""
   for x in contents:
