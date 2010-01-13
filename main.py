@@ -122,7 +122,7 @@ def metadata_from_citeulike_page(txt, url):
   }
   soup = BeautifulSoup(txt)
   title = soup.find('h1')
-  attrs['title'] = title.contents[0]
+  attrs['title'] = title.contents[0].rstrip()
   piece = title.nextSibling.nextSibling.nextSibling.nextSibling
   for author in piece.contents[1::2]:
     if attrs['author']:
