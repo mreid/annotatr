@@ -111,6 +111,10 @@ body {
   margin-top: 3em;
   padding-bottom: 7em;
 }
+.views {
+   color: #AAA;
+   font-size: 0.75em;
+}
 .button {
   float: left;
   font-family:'Lucida Grande', Helvetica, Arial, sans-serif; 

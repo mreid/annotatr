@@ -16,6 +16,8 @@
 # limitations under the License.
 
 from google.appengine.api import users
+# from google.appengine.api import urlfetch    # Instead of urllib ?
+
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp import util, template
@@ -23,8 +25,11 @@ from google.appengine.ext.webapp import util, template
 from BeautifulSoup import BeautifulSoup
 from mako.template import Template
 
+from models import Article
+
 import citeulike
 
+from datetime import datetime
 import os
 import urllib
 import re
@@ -60,11 +65,20 @@ class ArticleHandler(webapp.RequestHandler):
     path = self.request.path.replace('citeulike/', '')
     url = 'http://www.citeulike.org' + path
     socket = urllib.urlopen(url)
+
+    # Build template
     template = Template(open('views/page.html').read())
     attrs = citeulike.page_metadata(socket.read(), url)
+    attrs['views'] = Article.all().filter("id =", self.request.path).count()
     s = template.render_unicode(attributes=attrs)
+
+    # Render the page
     self.response.out.write(template.render_unicode(attributes=attrs))
- 
+
+    # Record that this article has been viewed
+    article = Article(id=self.request.path, last_viewed=datetime.now())
+    article.put()
+     
 def main():
   application = webapp.WSGIApplication(
       [('/', MainHandler), 
