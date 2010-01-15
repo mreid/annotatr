@@ -17,20 +17,21 @@
     <form method="get" action="/search/all">
     <input type="text" name="q" style="width:470px"/>
     <input type="submit" value="Search" />
+    <div style="font-size: .65em; color: #AAA; text-align: left; margin-left: 1em;">
+    Examples: 
+    <a href="/search/all?q=beta+%26%26+sheet*+%21alpha+%21helix">beta && sheet* !alpha !helix</a>,
+    <a href="/search/all?q=author%3A%22franklin+r+e%22">author:"franklin r e"</a>,
+    <a href="/search/all?q=year%3A2007+journal%3Anature">year:2007 journal:nature</a>,
+    <a href="/search/all?q=year%3A%5B1995+TO+1997%5D">year:[1995 TO 1997]</a>
+    </div>
     </form>
   </div>
 
   <div class="abstract" style="color:#AAA; text-align:center">
-    search examples
-    <br>
-    <br>
-    <a href="/search/all?q=beta+%26%26+sheet*+%21alpha+%21helix">beta && sheet* !alpha !helix</a>
-    <br>
-    <a href="/search/all?q=author%3A%22franklin+r+e%22">author:"franklin r e"</a>
-    <br>
-    <a href="/search/all?q=year%3A2007+journal%3Anature">year:2007 journal:nature</a>
-    <br>
-    <a href="/search/all?q=year%3A%5B1995+TO+1997%5D">year:[1995 TO 1997]</a>
+    recent searches<br/>
+    % for s in attributes['searches']:
+    <a href="/search/all?${s.encoded}">${s.query}</a><br/>
+    % endfor
   </div>
 
   <div id="recentcomments" class="dsq-widget" style="font-size: small;">

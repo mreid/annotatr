@@ -25,7 +25,7 @@ from google.appengine.ext.webapp import util, template
 from BeautifulSoup import BeautifulSoup
 from mako.template import Template
 
-from models import Article
+from models import Article, Search
 
 import citeulike
 
@@ -37,7 +37,11 @@ import cgi
 
 class MainHandler(webapp.RequestHandler):
   def get(self):
-    self.response.out.write(open('views/index.html').read())
+     
+    attrs = { 'searches': Search.all().order('-searched_at').fetch(5) }
+    template = Template(open('views/index.html').read()) 
+    s = template.render_unicode(attributes=attrs)
+    self.response.out.write(s)
 
 class SearchHandler(webapp.RequestHandler):
   def get(self):
@@ -52,6 +56,7 @@ class SearchHandler(webapp.RequestHandler):
     txt = socket.read()
     socket.close()
     entries, pages = citeulike.search_metadata(txt, i_page)
+
     attrs = {
         'entries': entries, 
         'query': 'citeulike.org/search/all?'+query_string.lower(),
@@ -59,6 +64,12 @@ class SearchHandler(webapp.RequestHandler):
     template = Template(open('views/search.html').read())
     s = template.render_unicode(attributes=attrs)
     self.response.out.write(s)
+    
+    # Record the search
+    search = Search(query=search_terms, 
+                    encoded=query_string,
+                    searched_at=datetime.now())
+    search.put()
 
 class ArticleHandler(webapp.RequestHandler):
   def get(self):
