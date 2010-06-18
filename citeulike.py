@@ -30,15 +30,15 @@ def page_metadata(txt, url):
   }
   soup = BeautifulSoup(txt)
   title = soup.find('h1')
-  attrs['title'] = title.contents[0].rstrip()
-  piece = title.nextSibling.nextSibling.nextSibling.nextSibling
-  for author in piece.contents[1::2]:
+  attrs['title'] = title.contents[0].string.rstrip()
+  author_links = soup.findAll('a', {"class":"author"})
+  for author_link in author_links:
     if attrs['author']:
-      attrs['author'] += ", "
-    attrs['author'] += unicode(author.contents[0])
-  reference = piece.nextSibling.nextSibling
-  if len(reference.contents) > 1:
-    for x in reference.contents[1].contents:
+      attrs['author'] += u", "
+    attrs['author'] += unicode(author_link.string)
+  reference = soup.find('div', {'id': 'citation'})
+  if reference and len(reference.contents) > 1:
+    for x in reference.contents:
       attrs['reference'] += unicode(x)
   abstract = soup.find('div', {'id':'abstract-body'})
   if abstract:
